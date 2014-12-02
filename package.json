@@ -9,7 +9,9 @@
     "atom": ">0.50.0"
   },
   "dependencies": {
-    "traceur": "0.0.78"
+    "esprima-fb": "^8001.1001.0-dev-harmony-fb",
+    "traceur": "0.0.78",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10",
