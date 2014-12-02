@@ -57,10 +57,15 @@ function parseURI(uri, callback) {
     }
   }));
   function parseAndPush(uri, buffer, lastModified) {
-    var syntaxTree = esprima.parse(buffer, {
-      loc: true,
-      tolerant: true
-    });
+    try {
+      var syntaxTree = esprima.parse(buffer, {
+        loc: true,
+        tolerant: true
+      });
+    } catch (error) {
+      console.error("error");
+      return null;
+    }
     cache.set(uri, new cachedObject(syntaxTree, lastModified));
     return syntaxTree;
   }
