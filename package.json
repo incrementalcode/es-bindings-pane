@@ -1,0 +1,20 @@
+{
+  "name": "es-module-view",
+  "main": "./build/index",
+  "version": "0.0.0",
+  "description": "Provides a ES6 module tree view panel.",
+  "repository": "https://github.com/atom/es-module-view",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  },
+  "dependencies": {
+    "traceur": "0.0.78"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-coffee": "^2.2.0",
+    "gulp-ext": "^1.0.0",
+    "gulp-traceur": "^0.14.1"
+  }
+}
