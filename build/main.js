@@ -21,19 +21,19 @@ function activate(state) {
   var treePanel = document.createElement('div');
   treePanel.className = 'es-bindings-pane';
   atom.workspace.addRightPanel({item: treePanel});
-  atom.packages.once('activated', (function() {
-    atom.workspace.observeActivePaneItem((function(item) {
-      if (item.getPath) {
-        parseURI(item.getPath(), (function(error, result) {
-          if (error) {
-            console.warn(error);
-            return;
-          }
-          var treeModel = result.treeModel;
-          var treeComponent = TreeComponent(treeModel.bake());
-          React.renderComponent(treeComponent, treePanel);
-        }));
-      }
-    }));
+  atom.workspace.observeActivePaneItem((function(item) {
+    if (item.getPath) {
+      parseURI(item.getPath(), (function(error, result) {
+        if (error) {
+          console.warn(error);
+          return React.unmountComponentAtNode(treePanel);
+        }
+        var treeModel = result.treeModel;
+        var treeComponent = TreeComponent(treeModel.bake());
+        React.renderComponent(treeComponent, treePanel);
+      }));
+    } else {
+      React.unmountComponentAtNode(treePanel);
+    }
   }));
 }
