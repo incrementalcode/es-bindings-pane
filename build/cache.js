@@ -47,27 +47,26 @@ function parseURI(uri, callback) {
     if (cache.has(uri) && cache.get(uri).lastModified.getTime() == lastModified.getTime())
       return callback(null, cache.get(uri).syntaxTree);
     if (tab) {
-      return callback(null, parseAndPush(uri, tab.getText(), lastModified));
+      return parseAndPush(uri, tab.getText(), lastModified, callback);
     } else {
       fs.readFile(uri, (function(error, buffer) {
         if (error)
           return callback(error);
-        return callback(null, parseAndPush(uri, buffer, lastModified));
+        return parseAndPush(uri, buffer, lastModified, callback);
       }));
     }
   }));
-  function parseAndPush(uri, buffer, lastModified) {
+  function parseAndPush(uri, buffer, lastModified, callback) {
     try {
       var syntaxTree = esprima.parse(buffer, {
         loc: true,
         tolerant: true
       });
     } catch (error) {
-      console.error("error");
-      return null;
+      return callback(error);
     }
     cache.set(uri, new cachedObject(syntaxTree, lastModified));
-    return syntaxTree;
+    return callback(null, syntaxTree);
   }
   function getAtomTab(uri) {
     var pane = atom.workspace.paneForUri(uri);

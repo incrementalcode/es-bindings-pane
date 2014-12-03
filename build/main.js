@@ -5,17 +5,27 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__parser_45_cache__,
+var $__cache__,
     $__tree_45_component__,
+    $__tree_45_model__,
     $__atom__;
-var parseURI = ($__parser_45_cache__ = require("./parser-cache"), $__parser_45_cache__ && $__parser_45_cache__.__esModule && $__parser_45_cache__ || {default: $__parser_45_cache__}).parseURI;
+var parseURI = ($__cache__ = require("./cache"), $__cache__ && $__cache__.__esModule && $__cache__ || {default: $__cache__}).parseURI;
 var TreeComponent = ($__tree_45_component__ = require("./tree-component"), $__tree_45_component__ && $__tree_45_component__.__esModule && $__tree_45_component__ || {default: $__tree_45_component__}).TreeComponent;
+var $__2 = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}),
+    TreeModel = $__2.TreeModel,
+    syntaxTreeToModel = $__2.syntaxTreeToModel;
 var _atom = ($__atom__ = require("atom"), $__atom__ && $__atom__.__esModule && $__atom__ || {default: $__atom__}).default;
 var React = _atom.React;
+var treePanel;
 function activate(state) {
+  var treePanel = document.createElement('div');
+  treePanel.className = 'es-bindings-pane';
+  atom.workspace.addRightPanel({item: treePanel});
   atom.packages.once('activated', (function() {
-    var element = document.createElement('div');
-    React.constructAndRenderComponent(TreeComponent, {}, element);
-    atom.workspaceView.appendToRight(element);
+    atom.workspace.observeActivePaneItem((function(item) {
+      if (item.getPath) {
+        parseURI(item.getPath(), (function(error, syntaxTree) {}));
+      }
+    }));
   }));
 }

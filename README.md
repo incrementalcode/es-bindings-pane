@@ -1,5 +1,9 @@
-# es-module-view package
+# ES Bindings Pane
 
-A short description of your package.
+It can be difficult to establish a Javascript file's contents, and even more tricky to track down which other files it depends on. The aim is to provide this contextual information in a easy-to-use atom plugin.
 
-![A screenshot of your spankin' package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+Currently this project is in an alpha stage, and not considered usable.
+
+## License
+
+MIT

@@ -1,9 +1,9 @@
 {
-  "name": "es-module-view",
+  "name": "es-bindings-pane",
   "main": "./build/index",
   "version": "0.0.0",
   "description": "Provides a ES6 module tree view panel.",
-  "repository": "https://github.com/atom/es-module-view",
+  "repository": "https://github.com/incrementallair/es-bindings-pane",
   "license": "MIT",
   "engines": {
     "atom": ">0.50.0"
