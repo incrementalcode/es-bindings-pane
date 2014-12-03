@@ -8,13 +8,14 @@ Object.defineProperties(exports, {
 var $__cache__,
     $__tree_45_component__,
     $__tree_45_model__,
-    $__react_45_atom_45_fork__;
+    $__atom__;
 var parseURI = ($__cache__ = require("./cache"), $__cache__ && $__cache__.__esModule && $__cache__ || {default: $__cache__}).parseURI;
 var TreeComponent = ($__tree_45_component__ = require("./tree-component"), $__tree_45_component__ && $__tree_45_component__.__esModule && $__tree_45_component__ || {default: $__tree_45_component__}).TreeComponent;
 var $__2 = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}),
     TreeModel = $__2.TreeModel,
     syntaxTreeToModel = $__2.syntaxTreeToModel;
-var React = ($__react_45_atom_45_fork__ = require("react-atom-fork"), $__react_45_atom_45_fork__ && $__react_45_atom_45_fork__.__esModule && $__react_45_atom_45_fork__ || {default: $__react_45_atom_45_fork__}).default;
+var _atom = ($__atom__ = require("atom"), $__atom__ && $__atom__.__esModule && $__atom__ || {default: $__atom__}).default;
+var React = _atom.React;
 var treePanel;
 function activate(state) {
   var treePanel = document.createElement('div');

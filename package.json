@@ -6,13 +6,11 @@
   "repository": "https://github.com/incrementallair/es-bindings-pane",
   "license": "MIT",
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">1.52.0"
   },
   "dependencies": {
     "esprima-fb": "^8001.1001.0-dev-harmony-fb",
     "estraverse": "^1.8.0",
-    "react-atom-fork": "^0.11.2",
-    "reactionary-atom-fork": "^1.0.0",
     "traceur": "0.0.78"
   },
   "devDependencies": {
