@@ -5,10 +5,10 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__atom__;
-var _atom = ($__atom__ = require("atom"), $__atom__ && $__atom__.__esModule && $__atom__ || {default: $__atom__}).default;
-var React = _atom.React;
-var Reactionary = _atom.Reactionary;
+var $__react_45_atom_45_fork__,
+    $__reactionary_45_atom_45_fork__;
+var React = ($__react_45_atom_45_fork__ = require("react-atom-fork"), $__react_45_atom_45_fork__ && $__react_45_atom_45_fork__.__esModule && $__react_45_atom_45_fork__ || {default: $__react_45_atom_45_fork__}).default;
+var Reactionary = ($__reactionary_45_atom_45_fork__ = require("reactionary-atom-fork"), $__reactionary_45_atom_45_fork__ && $__reactionary_45_atom_45_fork__.__esModule && $__reactionary_45_atom_45_fork__ || {default: $__reactionary_45_atom_45_fork__}).default;
 var TreeComponent = React.createClass({
   getInitialState: function() {
     return {collapsed: false};

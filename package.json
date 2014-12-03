@@ -11,6 +11,8 @@
   "dependencies": {
     "esprima-fb": "^8001.1001.0-dev-harmony-fb",
     "estraverse": "^1.8.0",
+    "react-atom-fork": "^0.11.2",
+    "reactionary-atom-fork": "^1.0.0",
     "traceur": "0.0.78"
   },
   "devDependencies": {
