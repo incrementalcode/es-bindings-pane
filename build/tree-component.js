@@ -20,11 +20,15 @@ var TreeComponent = React.createClass({
     }));
     var iconClass = getIconClass.bind(this)();
     var arrowClass = getArrowClass.bind(this)();
-    return Reactionary.div(null, Reactionary.div({
-      className: "es-container",
+    return Reactionary.div(null, Reactionary.div({className: "es-container"}, Reactionary.div({
+      className: arrowClass,
       onClick: this.toggle
-    }, Reactionary.div({className: arrowClass}), Reactionary.h5({className: iconClass}, " " + this.props.model.name)), this.state.collapsed ? null : Reactionary.ul(null, children));
+    }), Reactionary.h5({
+      className: iconClass,
+      onClick: this.jumpCursor
+    }, " " + this.props.model.name)), this.state.collapsed ? null : Reactionary.ul(null, children));
     function getIconClass() {
+      console.log(this.props.model.type);
       switch (this.props.model.type) {
         case "ImportDeclaration":
           return "icon-cloud-download es-binding";
@@ -48,6 +52,7 @@ var TreeComponent = React.createClass({
       }
     }
   },
+  jumpCursor: function() {},
   toggle: function() {
     this.setState({collapsed: !this.state.collapsed});
   }

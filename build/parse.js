@@ -19,7 +19,7 @@ function parse(syntaxTree, callback) {
 function _parse(syntaxTree) {
   var name = arguments[1] !== (void 0) ? arguments[1] : "root";
   var type = arguments[2] !== (void 0) ? arguments[2] : "Program";
-  var result = new TreeModel(name, type);
+  var result = new TreeModel(name, syntaxTree.loc, type);
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
       switch (node.type) {
         case "ImportDeclaration":
@@ -39,7 +39,7 @@ function _parse(syntaxTree) {
           result.addChild(_parse(node.body, node.id.name, node.type));
           return estraverse.VisitorOption.Skip;
         case "MethodDefinition":
-          result.addChild(_parse(node.body, node.key.name, node.type));
+          result.addChild(_parse(node.value, node.key.name, node.type));
           return estraverse.VisitorOption.Skip;
       }
     })});

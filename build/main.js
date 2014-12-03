@@ -25,7 +25,7 @@ function activate(state) {
     if (item.getPath) {
       parseURI(item.getPath(), (function(error, result) {
         if (error) {
-          console.warn(error);
+          console.warn(error.stack);
           return React.unmountComponentAtNode(treePanel);
         }
         var treeModel = result.treeModel;
