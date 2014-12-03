@@ -10,7 +10,6 @@ var $__tree_45_model__,
 var TreeModel = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}).TreeModel;
 var estraverse = ($__estraverse__ = require("estraverse"), $__estraverse__ && $__estraverse__.__esModule && $__estraverse__ || {default: $__estraverse__}).default;
 function parse(syntaxTree, callback) {
-  console.log(syntaxTree);
   try {
     return callback(null, _parse(syntaxTree));
   } catch (error) {

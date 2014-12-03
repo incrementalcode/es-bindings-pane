@@ -24,7 +24,15 @@ function activate(state) {
   atom.packages.once('activated', (function() {
     atom.workspace.observeActivePaneItem((function(item) {
       if (item.getPath) {
-        parseURI(item.getPath(), (function(error, syntaxTree) {}));
+        parseURI(item.getPath(), (function(error, result) {
+          if (error) {
+            console.warn(error);
+            return;
+          }
+          var treeModel = result.treeModel;
+          var treeComponent = TreeComponent(treeModel.bake());
+          React.renderComponent(treeComponent, treePanel);
+        }));
       }
     }));
   }));

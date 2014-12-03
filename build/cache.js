@@ -71,7 +71,7 @@ function parseURI(uri, callback) {
     parse(syntaxTree, (function(error, treeModel) {
       if (error)
         return callback(error);
-      var toCache = new cachedObject(syntaxTree, treeModel, lastModifier);
+      var toCache = new cachedObject(syntaxTree, treeModel, lastModified);
       cache.set(uri, toCache);
       return callback(null, toCache);
     }));
