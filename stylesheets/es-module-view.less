@@ -2,7 +2,7 @@
 
 .es-bindings-pane {
   width: 200px;
-  min-height: 100%;
+  height: 100%;
   padding-left: @component-icon-padding;
   padding-right: @component-padding;
   border-left: solid 1px black;
@@ -11,9 +11,19 @@
 }
 
 .es-container {
-  height: 25px;
+  height: @component-line-height;
   color: white;
   white-space: nowrap;
+}
+
+.es-meta {
+  font-size: @font-size - 2;
+  color: @background-color-info;
+  display: inline-block;
+}
+
+.es-meta::left {
+  content: ' ';
 }
 
 .es-icon {

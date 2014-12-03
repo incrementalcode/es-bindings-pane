@@ -20,8 +20,10 @@ function _parse(syntaxTree) {
   var name = arguments[1] !== (void 0) ? arguments[1] : "root";
   var loc = arguments[2] !== (void 0) ? arguments[2] : syntaxTree.loc;
   var type = arguments[3] !== (void 0) ? arguments[3] : "Program";
-  var result = new TreeModel(name, loc, type);
+  var meta = arguments[4] !== (void 0) ? arguments[4] : null;
+  var result = new TreeModel(name, loc, type, meta);
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
+      var meta;
       switch (node.type) {
         case "ImportDeclaration":
           for (var $__2 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
@@ -35,13 +37,19 @@ function _parse(syntaxTree) {
           }
           return estraverse.VisitorOption.Skip;
         case "FunctionDeclaration":
-          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type));
+          meta = node.params.map((function(param) {
+            return param.name;
+          })).join(", ");
+          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type, meta));
           return estraverse.VisitorOption.Skip;
         case "ClassDeclaration":
           result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type));
           return estraverse.VisitorOption.Skip;
         case "MethodDefinition":
-          result.addChild(_parse(node.value, node.key.name, node.key.loc, node.type));
+          meta = node.value.params.map((function(param) {
+            return param.name;
+          })).join(", ");
+          result.addChild(_parse(node.value, node.key.name, node.key.loc, node.type, meta));
           return estraverse.VisitorOption.Skip;
       }
     })});

@@ -20,13 +20,16 @@ var TreeComponent = React.createClass({
     }));
     var iconClass = getIconClass.bind(this)();
     var arrowClass = getArrowClass.bind(this)();
+    var metaData = null;
+    if (this.props.model.meta !== null)
+      metaData = Reactionary.h5({className: 'es-meta'}, " (" + this.props.model.meta + ")");
     return Reactionary.div(null, Reactionary.div({className: "es-container"}, Reactionary.div({
       className: arrowClass,
       onClick: this.toggleCollapsed
     }), Reactionary.h5({
       className: iconClass,
       onClick: this.highlightLocation
-    }, " " + this.props.model.name)), this.state.collapsed ? null : Reactionary.ul(null, children));
+    }, " " + this.props.model.name), metaData), this.state.collapsed ? null : Reactionary.ul(null, children));
     function getIconClass() {
       switch (this.props.model.type) {
         case "ImportDeclaration":
@@ -34,7 +37,7 @@ var TreeComponent = React.createClass({
         case "FunctionDeclaration":
           return "icon-gear es-binding";
         case "ClassDeclaration":
-          return "icon-puzzle-piece es-binding";
+          return "icon-puzzle es-binding";
         case "MethodDefinition":
           return "icon-gear es-binding";
       }
