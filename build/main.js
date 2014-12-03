@@ -22,6 +22,8 @@ function activate(state) {
   treePanel.className = 'es-bindings-pane';
   atom.workspace.addRightPanel({item: treePanel});
   atom.workspace.observeActivePaneItem((function(item) {
+    if (!item)
+      return;
     if (item.getPath && item.getGrammar && item.getGrammar().name == 'JavaScript') {
       parseURI(item.getPath(), (function(error, result) {
         if (error) {
