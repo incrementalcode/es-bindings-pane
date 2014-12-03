@@ -25,14 +25,39 @@ function _parse(syntaxTree) {
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
       var meta;
       switch (node.type) {
+        case "ExportDeclaration":
+          if (node.declaration) {
+            if (node.declaration.type == "VariableDeclaration") {
+              var body = node.declaration.declarations[0];
+              var name$__6 = body.id.name;
+              var location = body.id.loc;
+              result.addChild(_parse(body, name$__6, location, node.type));
+            } else {
+              var body$__7 = node.declaration;
+              var name$__8 = body$__7.name ? body$__7.name : body$__7.id.name;
+              var location$__9 = body$__7.name ? body$__7.loc : body$__7.id.loc;
+              result.addChild(_parse(body$__7, name$__8, location$__9, node.type));
+            }
+          } else {
+            for (var $__2 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
+                $__3; !($__3 = $__2.next()).done; ) {
+              var specifier = $__3.value;
+              {
+                var name$__10 = specifier.name ? specifier.name.name : specifier.id.name;
+                var loc$__11 = specifier.name ? specifier.name.loc : specifier.id.loc;
+                result.addChild(_parse(specifier, name$__10, loc$__11, node.type));
+              }
+            }
+          }
+          return estraverse.VisitorOption.Skip;
         case "ImportDeclaration":
-          for (var $__2 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
-              $__3; !($__3 = $__2.next()).done; ) {
-            var specifier = $__3.value;
+          for (var $__4 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
+              $__5; !($__5 = $__4.next()).done; ) {
+            var specifier$__12 = $__5.value;
             {
-              var name$__4 = specifier.name ? specifier.name.name : specifier.id.name;
-              var loc$__5 = specifier.name ? specifier.name.loc : specifier.id.loc;
-              result.addChild(_parse(specifier, name$__4, loc$__5, node.type));
+              var name$__13 = specifier$__12.name ? specifier$__12.name.name : specifier$__12.id.name;
+              var loc$__14 = specifier$__12.name ? specifier$__12.name.loc : specifier$__12.id.loc;
+              result.addChild(_parse(specifier$__12, name$__13, loc$__14, node.type));
             }
           }
           return estraverse.VisitorOption.Skip;

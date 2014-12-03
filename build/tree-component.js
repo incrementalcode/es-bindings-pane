@@ -34,6 +34,8 @@ var TreeComponent = React.createClass({
       switch (this.props.model.type) {
         case "ImportDeclaration":
           return "icon-cloud-download es-binding";
+        case "ExportDeclaration":
+          return "icon-cloud-upload es-binding";
         case "FunctionDeclaration":
           return "icon-gear es-binding";
         case "ClassDeclaration":
