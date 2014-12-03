@@ -22,10 +22,10 @@ function activate(state) {
   treePanel.className = 'es-bindings-pane';
   atom.workspace.addRightPanel({item: treePanel});
   atom.workspace.observeActivePaneItem((function(item) {
-    if (item.getPath) {
+    if (item.getPath && item.getGrammar && item.getGrammar().name == 'JavaScript') {
       parseURI(item.getPath(), (function(error, result) {
         if (error) {
-          console.warn(error.stack);
+          console.warn("Warning during parseURI() from main.js: " + error);
           return React.unmountComponentAtNode(treePanel);
         }
         var treeModel = result.treeModel;

@@ -18,8 +18,9 @@ function parse(syntaxTree, callback) {
 }
 function _parse(syntaxTree) {
   var name = arguments[1] !== (void 0) ? arguments[1] : "root";
-  var type = arguments[2] !== (void 0) ? arguments[2] : "Program";
-  var result = new TreeModel(name, syntaxTree.loc, type);
+  var loc = arguments[2] !== (void 0) ? arguments[2] : syntaxTree.loc;
+  var type = arguments[3] !== (void 0) ? arguments[3] : "Program";
+  var result = new TreeModel(name, loc, type);
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
       switch (node.type) {
         case "ImportDeclaration":
@@ -28,18 +29,19 @@ function _parse(syntaxTree) {
             var specifier = $__3.value;
             {
               var name$__4 = specifier.name ? specifier.name.name : specifier.id.name;
-              result.addChild(_parse(specifier, name$__4, node.type));
+              var loc$__5 = specifier.name ? specifier.name.loc : specifier.id.loc;
+              result.addChild(_parse(specifier, name$__4, loc$__5, node.type));
             }
           }
           return estraverse.VisitorOption.Skip;
         case "FunctionDeclaration":
-          result.addChild(_parse(node.body, node.id.name, node.type));
+          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type));
           return estraverse.VisitorOption.Skip;
         case "ClassDeclaration":
-          result.addChild(_parse(node.body, node.id.name, node.type));
+          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type));
           return estraverse.VisitorOption.Skip;
         case "MethodDefinition":
-          result.addChild(_parse(node.value, node.key.name, node.type));
+          result.addChild(_parse(node.value, node.key.name, node.key.loc, node.type));
           return estraverse.VisitorOption.Skip;
       }
     })});

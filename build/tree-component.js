@@ -22,13 +22,12 @@ var TreeComponent = React.createClass({
     var arrowClass = getArrowClass.bind(this)();
     return Reactionary.div(null, Reactionary.div({className: "es-container"}, Reactionary.div({
       className: arrowClass,
-      onClick: this.toggle
+      onClick: this.toggleCollapsed
     }), Reactionary.h5({
       className: iconClass,
-      onClick: this.jumpCursor
+      onClick: this.highlightLocation
     }, " " + this.props.model.name)), this.state.collapsed ? null : Reactionary.ul(null, children));
     function getIconClass() {
-      console.log(this.props.model.type);
       switch (this.props.model.type) {
         case "ImportDeclaration":
           return "icon-cloud-download es-binding";
@@ -52,8 +51,14 @@ var TreeComponent = React.createClass({
       }
     }
   },
-  jumpCursor: function() {},
-  toggle: function() {
+  highlightLocation: function() {
+    var location = this.props.model.location;
+    var range = [[location.start.line - 1, location.start.column], [location.end.line - 1, location.end.column]];
+    var editor = atom.workspace.getActiveTextEditor();
+    editor.setSelectedBufferRange(range);
+    editor.scrollToBufferPosition(range[0]);
+  },
+  toggleCollapsed: function() {
     this.setState({collapsed: !this.state.collapsed});
   }
 });
