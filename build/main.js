@@ -30,14 +30,17 @@ function activate(state) {
       parseURI(item.getPath(), (function(error, result) {
         if (error) {
           console.warn("Warning during parseURI() from main.js: " + error.stack);
-          return unmountTreePanel();
+          unmountTreePanel();
+          treePanel.style.setProperty('display', 'none');
         }
         unmountTreePanel();
+        treePanel.style.removeProperty('display');
         treeComponent = result.treeModel.render();
         treePanel.appendChild(treeComponent);
       }));
     } else {
       unmountTreePanel();
+      treePanel.style.setProperty('display', 'none');
     }
   }));
 }
