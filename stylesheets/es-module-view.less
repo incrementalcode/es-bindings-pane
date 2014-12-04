@@ -12,18 +12,14 @@
 
 .es-container {
   height: @component-line-height;
-  color: white;
+  color: @text-color;
   white-space: nowrap;
 }
 
 .es-meta {
   font-size: @font-size - 2;
-  color: @background-color-info;
+  color: @text-color-info;
   display: inline-block;
-}
-
-.es-meta::left {
-  content: ' ';
 }
 
 .es-icon {
@@ -33,4 +29,9 @@
 .es-binding {
   font-size: @font-size;
   display: inline-block;
+}
+
+.es-ul {
+  margin-left: @component-padding;
+  padding: 0px;
 }
