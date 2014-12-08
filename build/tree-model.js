@@ -5,10 +5,13 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var TreeModel = function TreeModel(name, location, type, meta) {
+var TreeModel = function TreeModel(name, location, type) {
+  var isExport = arguments[3] !== (void 0) ? arguments[3] : false;
+  var meta = arguments[4] !== (void 0) ? arguments[4] : null;
   this.name = name;
   this.location = location;
   this.type = type;
+  this.isExport = isExport;
   this.meta = meta;
   this.children = [];
   this.collapsed = false;
@@ -48,19 +51,31 @@ var TreeModel = function TreeModel(name, location, type, meta) {
     return root;
   },
   getIconClass: function() {
+    var result = "es-binding";
     switch (this.type) {
       case "ImportDeclaration":
-        return "icon-cloud-download es-binding";
+        result += " icon-cloud-download";
+        break;
       case "ExportDeclaration":
-        return "icon-cloud-upload es-binding";
+        result += " icon-cloud-upload";
+        break;
       case "FunctionDeclaration":
-        return "icon-gear es-binding";
+        result += " icon-gear";
+        break;
       case "ClassDeclaration":
-        return "icon-puzzle es-binding";
+        result += " icon-puzzle";
+        break;
       case "MethodDefinition":
-        return "icon-gear es-binding";
+        result += " icon-gear";
+        break;
     }
-    return "es-binding";
+    if (this.isExport)
+      result += " es-export-text";
+    else if (this.type == "ImportDeclaration")
+      result += " es-import-text";
+    else
+      result += " es-default-text";
+    return result;
   },
   getArrowClass: function() {
     if (this.children.length > 0) {

@@ -8,11 +8,11 @@
   border-left: solid 1px black;
   position: relative;
   overflow: auto;
+  background-color: @tree-view-background-color;
 }
 
 .es-container {
   height: @component-line-height;
-  color: @text-color;
   white-space: nowrap;
 }
 
@@ -24,6 +24,18 @@
 
 .es-icon {
   display: inline-block;
+}
+
+.es-default-text {
+  color: @text-color;
+}
+
+.es-export-text {
+  color: @text-color-warning;
+}
+
+.es-import-text {
+  color: @text-color-info;
 }
 
 .es-binding {

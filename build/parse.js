@@ -13,6 +13,7 @@ function parse(syntaxTree, callback) {
   try {
     return callback(null, _parse(syntaxTree));
   } catch (error) {
+    console.warn("Error in parse() at parse.js: " + error.stack);
     return callback(error);
   }
 }
@@ -22,61 +23,72 @@ function _parse(syntaxTree) {
   var type = arguments[3] !== (void 0) ? arguments[3] : "Program";
   var meta = arguments[4] !== (void 0) ? arguments[4] : null;
   var result = new TreeModel(name, loc, type, meta);
+  var imports = [];
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
-      var meta;
+      var meta,
+          isExport;
       switch (node.type) {
         case "ExportDeclaration":
-          if (node.declaration) {
-            if (node.declaration.type == "VariableDeclaration") {
-              var body = node.declaration.declarations[0];
-              var name$__6 = body.id.name;
-              var location = body.id.loc;
-              result.addChild(_parse(body, name$__6, location, node.type));
-            } else {
-              var body$__7 = node.declaration;
-              var name$__8 = body$__7.name ? body$__7.name : body$__7.id.name;
-              var location$__9 = body$__7.name ? body$__7.loc : body$__7.id.loc;
-              result.addChild(_parse(body$__7, name$__8, location$__9, node.type));
-            }
-          } else {
+          if (!node.declaration) {
             for (var $__2 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
                 $__3; !($__3 = $__2.next()).done; ) {
               var specifier = $__3.value;
               {
-                var name$__10 = specifier.name ? specifier.name.name : specifier.id.name;
-                var loc$__11 = specifier.name ? specifier.name.loc : specifier.id.loc;
-                result.addChild(_parse(specifier, name$__10, loc$__11, node.type));
+                var name$__7 = specifier.name ? specifier.name.name : specifier.id.name;
+                var loc$__8 = specifier.name ? specifier.name.loc : specifier.id.loc;
+                result.addChild(_parse(specifier, name$__7, loc$__8, node.type, true));
               }
             }
+            return estraverse.VisitorOption.Skip;
           }
-          return estraverse.VisitorOption.Skip;
+          break;
         case "ImportDeclaration":
           for (var $__4 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
               $__5; !($__5 = $__4.next()).done; ) {
-            var specifier$__12 = $__5.value;
-            {
-              var name$__13 = specifier$__12.name ? specifier$__12.name.name : specifier$__12.id.name;
-              var loc$__14 = specifier$__12.name ? specifier$__12.name.loc : specifier$__12.id.loc;
-              result.addChild(_parse(specifier$__12, name$__13, loc$__14, node.type));
-            }
+            var specifier$__9 = $__5.value;
+            imports.push({
+              specifier: specifier$__9,
+              node: node
+            });
           }
           return estraverse.VisitorOption.Skip;
         case "FunctionDeclaration":
           meta = node.params.map((function(param) {
             return param.name;
           })).join(", ");
-          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type, meta));
+          isExport = parent.type == "ExportDeclaration";
+          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type, isExport, meta));
           return estraverse.VisitorOption.Skip;
         case "ClassDeclaration":
-          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type));
+          isExport = parent.type == "ExportDeclaration";
+          result.addChild(_parse(node.body, node.id.name, node.id.loc, node.type, isExport));
           return estraverse.VisitorOption.Skip;
         case "MethodDefinition":
           meta = node.value.params.map((function(param) {
             return param.name;
           })).join(", ");
-          result.addChild(_parse(node.value, node.key.name, node.key.loc, node.type, meta));
+          result.addChild(_parse(node.value, node.key.name, node.key.loc, node.type, false, meta));
           return estraverse.VisitorOption.Skip;
       }
     })});
-  return result;
+  if (imports.length === 0)
+    return result;
+  var _result = new TreeModel(name, loc, type, meta);
+  var importModel = new TreeModel("Imports", loc, null, null);
+  result.name = "Module";
+  for (var $__2 = imports[$traceurRuntime.toProperty(Symbol.iterator)](),
+      $__3; !($__3 = $__2.next()).done; ) {
+    var _import = $__3.value;
+    {
+      var $__6 = _import,
+          specifier = $__6.specifier,
+          node = $__6.node;
+      var importName = specifier.name ? specifier.name.name : specifier.id.name;
+      var importLoc = specifier.name ? specifier.name.loc : specifier.id.loc;
+      importModel.addChild(_parse(specifier, importName, importLoc, node.type));
+    }
+  }
+  _result.addChild(importModel);
+  _result.addChild(result);
+  return _result;
 }
