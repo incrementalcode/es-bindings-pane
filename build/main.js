@@ -32,6 +32,7 @@ function activate(state) {
           console.warn("Warning during parseURI() from main.js: " + error.stack);
           unmountTreePanel();
           treePanel.style.setProperty('display', 'none');
+          return;
         }
         unmountTreePanel();
         treePanel.style.removeProperty('display');
