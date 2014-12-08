@@ -15,6 +15,7 @@ var TreeModel = function TreeModel(name, location, type) {
   this.meta = meta;
   this.children = [];
   this.collapsed = false;
+  this.lastClickTime = Date.now();
 };
 ($traceurRuntime.createClass)(TreeModel, {
   addChild: function(child) {
@@ -35,7 +36,7 @@ var TreeModel = function TreeModel(name, location, type) {
     text.className = this.getIconClass();
     text.textContent = " " + this.name;
     text.onclick = (function() {
-      return $__0.highlightLocation();
+      return $__0.handleClick();
     });
     var childList = document.createElement('ul');
     childList.className = 'es-ul';
@@ -84,12 +85,29 @@ var TreeModel = function TreeModel(name, location, type) {
       return "";
     }
   },
+  handleClick: function() {
+    var time = Date.now();
+    if (time - this.lastClickTime < 300) {
+      if (this.type == "ImportDeclaration")
+        this.jumpToImport();
+    } else {
+      this.highlightLocation();
+    }
+    this.lastClickTime = time;
+  },
   toggleCollapsed: function(childList) {
     this.collapsed = !this.collapsed;
     if (this.collapsed)
       childList.style.setProperty('display', 'none');
     else
       childList.style.removeProperty('display');
+  },
+  jumpToImport: function() {
+    if (this.meta && this.meta != "notFound")
+      atom.workspace.open(this.meta, {
+        activatePane: true,
+        searchAllPanes: true
+      });
   },
   highlightLocation: function() {
     var location = this.location;

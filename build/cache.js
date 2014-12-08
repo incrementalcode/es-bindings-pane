@@ -12,9 +12,11 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__parse__,
+    $__path__,
     $__esprima_45_fb__,
     $__fs__;
 var parse = ($__parse__ = require("./parse"), $__parse__ && $__parse__.__esModule && $__parse__ || {default: $__parse__}).parse;
+var path = ($__path__ = require("path"), $__path__ && $__path__.__esModule && $__path__ || {default: $__path__}).default;
 var esprima = ($__esprima_45_fb__ = require("esprima-fb"), $__esprima_45_fb__ && $__esprima_45_fb__.__esModule && $__esprima_45_fb__ || {default: $__esprima_45_fb__}).default;
 var fs = ($__fs__ = require("fs"), $__fs__ && $__fs__.__esModule && $__fs__ || {default: $__fs__}).default;
 var cache = new Map();
@@ -68,7 +70,8 @@ function parseURI(uri, callback) {
     } catch (error) {
       return callback(error);
     }
-    parse(syntaxTree, (function(error, treeModel) {
+    var baseName = path.basename(uri);
+    parse(syntaxTree, baseName, (function(error, treeModel) {
       if (error)
         return callback(error);
       var toCache = new cachedObject(syntaxTree, treeModel, lastModified);
