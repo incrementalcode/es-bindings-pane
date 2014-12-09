@@ -13,13 +13,17 @@ var TreeModel = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model_
 var estraverse = ($__estraverse__ = require("estraverse"), $__estraverse__ && $__estraverse__.__esModule && $__estraverse__ || {default: $__estraverse__}).default;
 var tools = ($__es_45_parse_45_tools__ = require("es-parse-tools"), $__es_45_parse_45_tools__ && $__es_45_parse_45_tools__.__esModule && $__es_45_parse_45_tools__ || {default: $__es_45_parse_45_tools__}).default;
 var path = ($__path__ = require("path"), $__path__ && $__path__.__esModule && $__path__ || {default: $__path__}).default;
-function parseTreeModel(syntaxTree, rootName, callback) {
-  try {
-    return callback(null, _parse(syntaxTree, rootName));
-  } catch (error) {
-    console.warn("Error in _parse() at parse-tree-model.js: " + error.stack);
-    return callback(error);
-  }
+function parseTreeModel(uri, callback) {
+  tools.parseURI(uri, (function(error, scopes) {
+    if (error)
+      return callback(error);
+    try {
+      return callback(null, _parse(scopes[0].block, path.basename(uri)));
+    } catch (error) {
+      console.warn("Error in _parse() at parse-tree-model.js: " + error.stack);
+      return callback(error);
+    }
+  }));
 }
 function _parse(syntaxTree) {
   var name = arguments[1] !== (void 0) ? arguments[1] : "root";
