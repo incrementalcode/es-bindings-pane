@@ -14,7 +14,8 @@ Object.defineProperties(exports, {
 var $__parse__,
     $__path__,
     $__esprima_45_fb__,
-    $__fs__;
+    $__fs__,
+    $__es_45_parse_45_tools__;
 var parse = ($__parse__ = require("./parse"), $__parse__ && $__parse__.__esModule && $__parse__ || {default: $__parse__}).parse;
 var path = ($__path__ = require("path"), $__path__ && $__path__.__esModule && $__path__ || {default: $__path__}).default;
 var esprima = ($__esprima_45_fb__ = require("esprima-fb"), $__esprima_45_fb__ && $__esprima_45_fb__.__esModule && $__esprima_45_fb__ || {default: $__esprima_45_fb__}).default;
@@ -41,7 +42,11 @@ function dirtyURI(uri) {
 function clearCache() {
   cache.clear();
 }
+var tools = ($__es_45_parse_45_tools__ = require("es-parse-tools"), $__es_45_parse_45_tools__ && $__es_45_parse_45_tools__.__esModule && $__es_45_parse_45_tools__ || {default: $__es_45_parse_45_tools__}).default;
 function parseURI(uri, callback) {
+  tools.parseURI(uri, (function(err, res) {
+    return console.log(res);
+  }));
   var tab = getAtomTab();
   if (tab && cache.has(uri) && cache.get(uri).isClean)
     return callback(null, cache.get(uri).syntaxTree);

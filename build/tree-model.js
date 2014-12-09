@@ -54,7 +54,7 @@ var TreeModel = function TreeModel(name, location, type) {
   getIconClass: function() {
     var result = "es-binding";
     switch (this.type) {
-      case "ImportDeclaration":
+      case "ImportModule":
         result += " icon-cloud-download";
         break;
       case "ExportDeclaration":
@@ -72,7 +72,7 @@ var TreeModel = function TreeModel(name, location, type) {
     }
     if (this.isExport)
       result += " es-export-text";
-    else if (this.type == "ImportDeclaration")
+    else if (this.type == "ImportModule")
       result += " es-import-text";
     else
       result += " es-default-text";
@@ -88,7 +88,7 @@ var TreeModel = function TreeModel(name, location, type) {
   handleClick: function() {
     var time = Date.now();
     if (time - this.lastClickTime < 300) {
-      if (this.type == "ImportDeclaration")
+      if (this.type == "ImportModule")
         this.jumpToImport();
     } else {
       this.highlightLocation();
@@ -110,6 +110,8 @@ var TreeModel = function TreeModel(name, location, type) {
       });
   },
   highlightLocation: function() {
+    if (!this.location)
+      return;
     var location = this.location;
     var range = [[location.start.line - 1, location.start.column], [location.end.line - 1, location.end.column]];
     var editor = atom.workspace.getActiveTextEditor();

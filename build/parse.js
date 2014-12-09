@@ -38,9 +38,9 @@ function _parse(syntaxTree) {
                 $__5; !($__5 = $__4.next()).done; ) {
               var specifier = $__5.value;
               {
-                var name$__9 = specifier.name ? specifier.name.name : specifier.id.name;
-                var loc$__10 = specifier.name ? specifier.name.loc : specifier.id.loc;
-                result.addChild(_parse(specifier, name$__9, loc$__10, node.type, true));
+                var name$__13 = specifier.name ? specifier.name.name : specifier.id.name;
+                var loc$__14 = specifier.name ? specifier.name.loc : specifier.id.loc;
+                result.addChild(_parse(specifier, name$__13, loc$__14, node.type, true));
               }
             }
             return estraverse.VisitorOption.Skip;
@@ -49,9 +49,9 @@ function _parse(syntaxTree) {
         case "ImportDeclaration":
           for (var $__6 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
               $__7; !($__7 = $__6.next()).done; ) {
-            var specifier$__11 = $__7.value;
+            var specifier$__15 = $__7.value;
             imports.push({
-              specifier: specifier$__11,
+              specifier: specifier$__15,
               node: node
             });
           }
@@ -80,26 +80,51 @@ function _parse(syntaxTree) {
   var _result = new TreeModel(name, loc, type, meta);
   var importContainerModel = new TreeModel("Imports", loc, null, null);
   result.name = "Module";
-  var $__12 = function() {
-    var _import = $__5.value;
-    {
-      var $__8 = _import,
-          specifier = $__8.specifier,
-          node = $__8.node;
-      var editor = atom.workspace.getActiveTextEditor();
-      var importName = specifier.name ? specifier.name.name : specifier.id.name;
-      var importLoc = specifier.name ? specifier.name.loc : specifier.id.loc;
-      var importModel = _parse(specifier, importName, importLoc, node.type);
-      tools.resolveModulePath(editor.getPath(), node.source.value, (function(err, res) {
-        if (res)
-          importModel.meta = path.normalize(res);
-      }));
-      importContainerModel.addChild(importModel);
-    }
-  };
+  var importModuleMap = new Map();
   for (var $__4 = imports[$traceurRuntime.toProperty(Symbol.iterator)](),
       $__5; !($__5 = $__4.next()).done; ) {
-    $__12();
+    var _import = $__5.value;
+    {
+      var source = _import.node.source.value;
+      var sourceBaseName = path.basename(source);
+      if (!importModuleMap.has(source))
+        importModuleMap.set(source, {
+          uriBase: sourceBaseName,
+          moduleImports: []
+        });
+      importModuleMap.get(source).moduleImports.push(_import);
+    }
+  }
+  var editor = atom.workspace.getActiveTextEditor();
+  for (var $__8 = importModuleMap[$traceurRuntime.toProperty(Symbol.iterator)](),
+      $__9; !($__9 = $__8.next()).done; ) {
+    var $__10 = $__9.value,
+        source$__16 = $__10[0],
+        $__11 = $__10[1],
+        uriBase = $__11.uriBase,
+        moduleImports = $__11.moduleImports;
+    {
+      var moduleModel = new TreeModel(uriBase, null, "ImportModule", null);
+      for (var $__6 = moduleImports[$traceurRuntime.toProperty(Symbol.iterator)](),
+          $__7; !($__7 = $__6.next()).done; ) {
+        var _import$__17 = $__7.value;
+        {
+          var $__12 = _import$__17,
+              specifier = $__12.specifier,
+              node = $__12.node;
+          var importName = specifier.name ? specifier.name.name : specifier.id.name;
+          var importLoc = specifier.name ? specifier.name.loc : specifier.id.loc;
+          var importModel = _parse(specifier, importName, importLoc, node.type);
+          moduleModel.addChild(importModel);
+        }
+      }
+      tools.resolveModulePath(editor.getPath(), source$__16, (function(err, res) {
+        if (!err)
+          moduleModel.meta = res;
+      }));
+      moduleModel.collapsed = true;
+      importContainerModel.addChild(moduleModel);
+    }
   }
   _result.addChild(importContainerModel);
   _result.addChild(result);
