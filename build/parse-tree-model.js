@@ -32,11 +32,6 @@ function _parse(syntaxTree, callback) {
   _parseSyntaxTree(syntaxTree, result, imports, (function(error, _) {
     if (error)
       return callback(error);
-    if (imports.length === 0)
-      return callback(null, result);
-    var _result = new TreeModel(name, loc, type, meta);
-    var importContainerModel = new TreeModel("Imports", loc, null, null);
-    result.name = "Module";
     var importModuleMap = new Map();
     for (var $__5 = imports[$traceurRuntime.toProperty(Symbol.iterator)](),
         $__6; !($__6 = $__5.next()).done; ) {
@@ -90,7 +85,7 @@ function _parse(syntaxTree, callback) {
             moduleModel.type = "ImportModule";
             moduleModel.location = null;
             moduleModel.meta = modulePath;
-            importContainerModel.addChild(moduleModel);
+            result.addImport(moduleModel);
           }
           callback();
         }));
@@ -98,9 +93,7 @@ function _parse(syntaxTree, callback) {
     }), (function(error, _) {
       if (error)
         return callback(error);
-      _result.addChild(importContainerModel);
-      _result.addChild(result);
-      return callback(null, _result);
+      return callback(null, result);
     }));
   }));
 }

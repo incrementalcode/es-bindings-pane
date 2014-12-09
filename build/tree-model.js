@@ -14,13 +14,16 @@ var TreeModel = function TreeModel(name, location, type) {
   this.isExport = isExport;
   this.meta = meta;
   this.children = [];
+  this.imports = [];
   this.collapsed = false;
   this.lastClickTime = Date.now();
 };
 ($traceurRuntime.createClass)(TreeModel, {
   addChild: function(child) {
     this.children.push(child);
-    return this;
+  },
+  addImport: function(_import) {
+    this.imports.push(_import);
   },
   render: function() {
     var $__0 = this;
@@ -30,7 +33,7 @@ var TreeModel = function TreeModel(name, location, type) {
     var arrow = document.createElement('div');
     arrow.className = this.getArrowClass();
     arrow.onclick = (function() {
-      return $__0.toggleCollapsed(childList);
+      return $__0.toggleCollapsed(childList, arrow);
     });
     var text = document.createElement('h5');
     text.className = this.getIconClass();
@@ -47,6 +50,9 @@ var TreeModel = function TreeModel(name, location, type) {
       childList.style.setProperty('display', 'none');
     container.appendChild(arrow);
     container.appendChild(text);
+    this.imports.map((function(_import) {
+      return root.appendChild(_import.render());
+    }));
     root.appendChild(container);
     root.appendChild(childList);
     return root;
@@ -95,12 +101,14 @@ var TreeModel = function TreeModel(name, location, type) {
     }
     this.lastClickTime = time;
   },
-  toggleCollapsed: function(childList) {
+  toggleCollapsed: function(childList, arrow) {
     this.collapsed = !this.collapsed;
     if (this.collapsed)
       childList.style.setProperty('display', 'none');
     else
       childList.style.removeProperty('display');
+    console.log(arrow);
+    arrow.className = this.collapsed ? arrow.className.replace('icon-chevron-down', 'icon-chevron-right') : arrow.className.replace('icon-chevron-right', 'icon-chevron-down');
   },
   jumpToImport: function() {
     if (this.meta && this.meta != "notFound")
