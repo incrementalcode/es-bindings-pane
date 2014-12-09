@@ -44,9 +44,6 @@ function clearCache() {
 }
 var tools = ($__es_45_parse_45_tools__ = require("es-parse-tools"), $__es_45_parse_45_tools__ && $__es_45_parse_45_tools__.__esModule && $__es_45_parse_45_tools__ || {default: $__es_45_parse_45_tools__}).default;
 function parseURI(uri, callback) {
-  tools.parseURI(uri, (function(err, res) {
-    return console.log(res);
-  }));
   var tab = getAtomTab();
   if (tab && cache.has(uri) && cache.get(uri).isClean)
     return callback(null, cache.get(uri).syntaxTree);

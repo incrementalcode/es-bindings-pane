@@ -6,16 +6,19 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__cache__,
+    $__resize_45_handle__,
     $__tree_45_model__;
 var parseURI = ($__cache__ = require("./cache"), $__cache__ && $__cache__.__esModule && $__cache__ || {default: $__cache__}).parseURI;
-var $__1 = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}),
-    TreeModel = $__1.TreeModel,
-    syntaxTreeToModel = $__1.syntaxTreeToModel;
+var createResizeHandle = ($__resize_45_handle__ = require("./resize-handle"), $__resize_45_handle__ && $__resize_45_handle__.__esModule && $__resize_45_handle__ || {default: $__resize_45_handle__}).createResizeHandle;
+var $__2 = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}),
+    TreeModel = $__2.TreeModel,
+    syntaxTreeToModel = $__2.syntaxTreeToModel;
 var treePanel,
     treeComponent = null;
 function activate(state) {
-  var treePanel = document.createElement('div');
+  treePanel = document.createElement('div');
   treePanel.className = 'es-bindings-pane';
+  createResizeHandle(treePanel);
   atom.workspace.addRightPanel({item: treePanel});
   var unmountTreePanel = (function() {
     if (treeComponent) {

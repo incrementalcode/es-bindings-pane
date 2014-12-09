@@ -5,10 +5,19 @@
   height: 100%;
   padding-left: @component-icon-padding;
   padding-right: @component-padding;
-  border-left: solid 1px black;
   position: relative;
   overflow: auto;
   background-color: @tree-view-background-color;
+}
+
+.es-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  cursor: col-resize;
+  z-index: 3;
 }
 
 .es-container {
