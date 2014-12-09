@@ -65,26 +65,31 @@ function _parse(syntaxTree, callback) {
           $__12 = $__11[1],
           uriBase = $__12.uriBase,
           moduleImports = $__12.moduleImports;
-      var moduleModel = new TreeModel(uriBase, null, "ImportModule", null);
-      for (var $__9 = moduleImports[$traceurRuntime.toProperty(Symbol.iterator)](),
-          $__10; !($__10 = $__9.next()).done; ) {
-        var _import = $__10.value;
-        {
-          var $__13 = _import,
-              specifier = $__13.specifier,
-              node = $__13.node;
-          var importName = specifier.name ? specifier.name.name : specifier.id.name;
-          var importLoc = specifier.name ? specifier.name.loc : specifier.id.loc;
-          var importModel = new TreeModel(importName, importLoc, node.type);
-          moduleModel.addChild(importModel);
-        }
-      }
-      moduleModel.collapsed = true;
-      importContainerModel.addChild(moduleModel);
-      tools.resolveModulePath(editor.getPath(), source, (function(err, res) {
-        if (!err)
-          moduleModel.meta = res;
-        callback();
+      tools.resolveModulePath(editor.getPath(), source, (function(error, modulePath) {
+        if (error || modulePath == "notFound")
+          return callback();
+        var moduleModel = parseTreeModel(modulePath, (function(error, moduleModel) {
+          if (!error) {
+            if (moduleModel.children.length == 2 && moduleModel.children[0].name == "Imports") {
+              var name$__13 = moduleModel.name;
+              moduleModel = moduleModel.children[1];
+              moduleModel.name = name$__13;
+            }
+            moduleModel.children = moduleModel.children.filter((function(child) {
+              return child.isExport;
+            }));
+            for (var $__9 = moduleModel.children[$traceurRuntime.toProperty(Symbol.iterator)](),
+                $__10; !($__10 = $__9.next()).done; ) {
+              var child = $__10.value;
+              child.collapsed = true;
+            }
+            moduleModel.collapsed = true;
+            moduleModel.type = "ImportModule";
+            moduleModel.meta = modulePath;
+            importContainerModel.addChild(moduleModel);
+          }
+          callback();
+        }));
       }));
     }), (function(error, _) {
       if (error)
