@@ -65,11 +65,6 @@ function _parse(syntaxTree, callback) {
           return callback();
         var moduleModel = parseTreeModel(modulePath, (function(error, moduleModel) {
           if (!error) {
-            if (moduleModel.children.length == 2 && moduleModel.children[0].name == "Imports") {
-              var name$__13 = moduleModel.name;
-              moduleModel = moduleModel.children[1];
-              moduleModel.name = name$__13;
-            }
             moduleModel.children = moduleModel.children.filter((function(child) {
               return child.isExport;
             }));
@@ -84,6 +79,7 @@ function _parse(syntaxTree, callback) {
             moduleModel.collapsed = true;
             moduleModel.type = "ImportModule";
             moduleModel.location = null;
+            moduleModel.imports = [];
             moduleModel.meta = modulePath;
             result.addImport(moduleModel);
           }
@@ -120,9 +116,9 @@ function _parseSyntaxTree(syntaxTree, result, imports, callback) {
         case "ImportDeclaration":
           for (var $__7 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
               $__8; !($__8 = $__7.next()).done; ) {
-            var specifier$__14 = $__8.value;
+            var specifier$__13 = $__8.value;
             imports.push({
-              specifier: specifier$__14,
+              specifier: specifier$__13,
               node: node
             });
           }

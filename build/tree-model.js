@@ -50,9 +50,12 @@ var TreeModel = function TreeModel(name, location, type) {
       childList.style.setProperty('display', 'none');
     container.appendChild(arrow);
     container.appendChild(text);
-    this.imports.map((function(_import) {
-      return root.appendChild(_import.render());
-    }));
+    if (this.imports.length > 0) {
+      this.imports.map((function(_import) {
+        return root.appendChild(_import.render());
+      }));
+      root.appendChild(document.createElement('br'));
+    }
     root.appendChild(container);
     root.appendChild(childList);
     return root;
@@ -107,7 +110,6 @@ var TreeModel = function TreeModel(name, location, type) {
       childList.style.setProperty('display', 'none');
     else
       childList.style.removeProperty('display');
-    console.log(arrow);
     arrow.className = this.collapsed ? arrow.className.replace('icon-chevron-down', 'icon-chevron-right') : arrow.className.replace('icon-chevron-right', 'icon-chevron-down');
   },
   jumpToImport: function() {
