@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperties(exports, {
-  parse: {get: function() {
-      return parse;
+  parseTreeModel: {get: function() {
+      return parseTreeModel;
     }},
   __esModule: {value: true}
 });
@@ -13,11 +13,11 @@ var TreeModel = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model_
 var estraverse = ($__estraverse__ = require("estraverse"), $__estraverse__ && $__estraverse__.__esModule && $__estraverse__ || {default: $__estraverse__}).default;
 var tools = ($__es_45_parse_45_tools__ = require("es-parse-tools"), $__es_45_parse_45_tools__ && $__es_45_parse_45_tools__.__esModule && $__es_45_parse_45_tools__ || {default: $__es_45_parse_45_tools__}).default;
 var path = ($__path__ = require("path"), $__path__ && $__path__.__esModule && $__path__ || {default: $__path__}).default;
-function parse(syntaxTree, rootName, callback) {
+function parseTreeModel(syntaxTree, rootName, callback) {
   try {
     return callback(null, _parse(syntaxTree, rootName));
   } catch (error) {
-    console.warn("Error in parse() at parse.js: " + error.stack);
+    console.warn("Error in _parse() at parse-tree-model.js: " + error.stack);
     return callback(error);
   }
 }
