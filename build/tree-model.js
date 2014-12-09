@@ -37,10 +37,13 @@ var TreeModel = function TreeModel(name, location, type) {
     });
     var text = document.createElement('h5');
     text.className = this.getIconClass();
-    text.textContent = " " + this.name;
+    text.innerHTML = " " + this.name;
     text.onclick = (function() {
       return $__0.handleClick();
     });
+    if (this.type == 'FunctionDeclaration' || this.type == 'MethodDefinition') {
+      text.innerHTML += ("<i>(" + this.meta + ")</i>");
+    }
     var childList = document.createElement('ul');
     childList.className = 'es-ul';
     this.children.map((function(child) {

@@ -26,8 +26,9 @@ function _parse(syntaxTree, callback) {
   var name = arguments[2] !== (void 0) ? arguments[2] : "root";
   var loc = arguments[3] !== (void 0) ? arguments[3] : syntaxTree.loc;
   var type = arguments[4] !== (void 0) ? arguments[4] : "Program";
-  var meta = arguments[5] !== (void 0) ? arguments[5] : null;
-  var result = new TreeModel(name, loc, type, meta);
+  var isExport = arguments[5] !== (void 0) ? arguments[5] : false;
+  var meta = arguments[6] !== (void 0) ? arguments[6] : null;
+  var result = new TreeModel(name, loc, type, isExport, meta);
   var imports = [];
   _parseSyntaxTree(syntaxTree, result, imports, (function(error, _) {
     if (error)
