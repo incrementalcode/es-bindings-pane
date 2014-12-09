@@ -81,10 +81,14 @@ function _parse(syntaxTree, callback) {
             for (var $__9 = moduleModel.children[$traceurRuntime.toProperty(Symbol.iterator)](),
                 $__10; !($__10 = $__9.next()).done; ) {
               var child = $__10.value;
-              child.collapsed = true;
+              {
+                child.collapsed = true;
+                child.location = null;
+              }
             }
             moduleModel.collapsed = true;
             moduleModel.type = "ImportModule";
+            moduleModel.location = null;
             moduleModel.meta = modulePath;
             importContainerModel.addChild(moduleModel);
           }
