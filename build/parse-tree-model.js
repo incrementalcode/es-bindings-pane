@@ -26,9 +26,9 @@ function _parse(syntaxTree, callback) {
   var name = arguments[2] !== (void 0) ? arguments[2] : "root";
   var loc = arguments[3] !== (void 0) ? arguments[3] : syntaxTree.loc;
   var type = arguments[4] !== (void 0) ? arguments[4] : "Program";
-  var isExport = arguments[5] !== (void 0) ? arguments[5] : false;
+  var moduleType = arguments[5] !== (void 0) ? arguments[5] : false;
   var meta = arguments[6] !== (void 0) ? arguments[6] : null;
-  var result = new TreeModel(name, loc, type, isExport, meta);
+  var result = new TreeModel(name, loc, type, moduleType, meta);
   var imports = [];
   _parseSyntaxTree(syntaxTree, result, imports, (function(error, _) {
     if (error)
@@ -67,7 +67,7 @@ function _parse(syntaxTree, callback) {
         var moduleModel = parseTreeModel(modulePath, (function(error, moduleModel) {
           if (!error) {
             moduleModel.children = moduleModel.children.filter((function(child) {
-              return child.isExport;
+              return child.moduleType == 'export';
             }));
             var $__13 = function() {
               var child = $__10.value;
@@ -75,10 +75,11 @@ function _parse(syntaxTree, callback) {
                 if (moduleImports.filter((function(_import) {
                   return _import.name == child.name;
                 })).length > 0)
-                  child.isImport = true;
+                  child.moduleType = 'import';
+                else
+                  child.moduleType = 'unreferencedImport';
+                child.modulePath = modulePath;
                 child.collapsed = true;
-                child.location = null;
-                child.isExport = false;
               }
             };
             for (var $__9 = moduleModel.children[$traceurRuntime.toProperty(Symbol.iterator)](),
@@ -86,11 +87,11 @@ function _parse(syntaxTree, callback) {
               $__13();
             }
             moduleModel.collapsed = true;
-            moduleModel.isImport = true;
+            moduleModel.moduleType = 'import';
             moduleModel.type = "ImportModule";
             moduleModel.location = null;
             moduleModel.imports = [];
-            moduleModel.meta = modulePath;
+            moduleModel.modulePath = modulePath;
             result.addImport(moduleModel);
           }
           callback();
@@ -107,7 +108,7 @@ function _parseSyntaxTree(syntaxTree, result, imports, callback) {
   var declarations = [];
   estraverse.traverse(syntaxTree, {enter: (function(node, parent) {
       var meta,
-          isExport;
+          moduleType;
       switch (node.type) {
         case "ExportDeclaration":
           if (!node.declaration) {
@@ -137,12 +138,12 @@ function _parseSyntaxTree(syntaxTree, result, imports, callback) {
           meta = node.params.map((function(param) {
             return param.name;
           })).join(", ");
-          isExport = parent.type == "ExportDeclaration";
-          declarations.push([node.body, node.id.name, node.id.loc, node.type, isExport, meta]);
+          moduleType = parent.type == "ExportDeclaration" ? 'export' : '';
+          declarations.push([node.body, node.id.name, node.id.loc, node.type, moduleType, meta]);
           return estraverse.VisitorOption.Skip;
         case "ClassDeclaration":
-          isExport = parent.type == "ExportDeclaration";
-          declarations.push([node.body, node.id.name, node.id.loc, node.type, isExport, null]);
+          moduleType = parent.type == "ExportDeclaration" ? 'export' : '';
+          declarations.push([node.body, node.id.name, node.id.loc, node.type, moduleType, null]);
           return estraverse.VisitorOption.Skip;
         case "MethodDefinition":
           meta = node.value.params.map((function(param) {

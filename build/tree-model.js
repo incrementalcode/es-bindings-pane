@@ -6,13 +6,12 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var TreeModel = function TreeModel(name, location, type) {
-  var isExport = arguments[3] !== (void 0) ? arguments[3] : false;
+  var moduleType = arguments[3] !== (void 0) ? arguments[3] : '';
   var meta = arguments[4] !== (void 0) ? arguments[4] : null;
   this.name = name;
   this.location = location;
   this.type = type;
-  this.isExport = isExport;
-  this.isImport = false;
+  this.moduleType = moduleType;
   this.meta = meta;
   this.children = [];
   this.imports = [];
@@ -78,9 +77,9 @@ var TreeModel = function TreeModel(name, location, type) {
         result += " icon-list-ordered";
         break;
     }
-    if (this.isExport)
+    if (this.moduleType == 'export')
       result += " es-export-text";
-    else if (this.isImport)
+    else if (this.moduleType == 'import')
       result += " es-import-text";
     else
       result += " es-default-text";
@@ -97,8 +96,8 @@ var TreeModel = function TreeModel(name, location, type) {
   },
   handleClick: function() {
     var time = Date.now();
-    if (time - this.lastClickTime < 300) {
-      if (this.type == "ImportModule")
+    if (this.moduleType == "import" || this.moduleType == "unreferencedImport") {
+      if (time - this.lastClickTime < 300)
         this.jumpToImport();
     } else {
       this.highlightLocation();
@@ -114,18 +113,23 @@ var TreeModel = function TreeModel(name, location, type) {
     arrow.className = this.collapsed ? arrow.className.replace('icon-chevron-down', 'icon-chevron-right') : arrow.className.replace('icon-chevron-right', 'icon-chevron-down');
   },
   jumpToImport: function() {
-    if (this.meta && this.meta != "notFound")
-      atom.workspace.open(this.meta, {
+    var $__0 = this;
+    if (this.modulePath && this.modulePath != "notFound")
+      atom.workspace.open(this.modulePath, {
         activatePane: true,
         searchAllPanes: true
-      });
+      }).then((function(editor) {
+        $__0._highlightLocationInEditor(editor, $__0.location);
+      }));
   },
   highlightLocation: function() {
     if (!this.location)
       return;
-    var location = this.location;
-    var range = [[location.start.line - 1, location.start.column], [location.end.line - 1, location.end.column]];
     var editor = atom.workspace.getActiveTextEditor();
+    this._highlightLocationInEditor(editor, this.location);
+  },
+  _highlightLocationInEditor: function(editor, location) {
+    var range = [[location.start.line - 1, location.start.column], [location.end.line - 1, location.end.column]];
     editor.setSelectedBufferRange(range);
     editor.scrollToBufferPosition(range[0]);
   }
