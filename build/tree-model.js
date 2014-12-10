@@ -54,12 +54,9 @@ var TreeModel = function TreeModel(name, location, type) {
       childList.style.setProperty('display', 'none');
     container.appendChild(arrow);
     container.appendChild(text);
-    if (this.imports.length > 0) {
-      this.imports.map((function(_import) {
-        return root.appendChild(_import.render());
-      }));
-      root.appendChild(document.createElement('br'));
-    }
+    this.imports.map((function(_import) {
+      return root.appendChild(_import.render());
+    }));
     root.appendChild(container);
     root.appendChild(childList);
     return root;
@@ -68,19 +65,17 @@ var TreeModel = function TreeModel(name, location, type) {
     var result = "es-binding";
     switch (this.type) {
       case "ImportModule":
-        result += " icon-cloud-download";
         break;
       case "ExportDeclaration":
-        result += " icon-cloud-upload";
         break;
       case "FunctionDeclaration":
-        result += " icon-gear";
+        result += " icon-list-ordered";
         break;
       case "ClassDeclaration":
-        result += " icon-puzzle";
+        result += " icon-versions";
         break;
       case "MethodDefinition":
-        result += " icon-gear";
+        result += " icon-list-ordered";
         break;
     }
     if (this.isExport)
