@@ -63,7 +63,7 @@ var TreeModel = function TreeModel(name, location, type) {
   getIconClass: function() {
     var result = "es-binding";
     switch (this.type) {
-      case "ImportModule":
+      case "moduleImport":
         break;
       case "ExportDeclaration":
         break;
@@ -96,7 +96,7 @@ var TreeModel = function TreeModel(name, location, type) {
   },
   handleClick: function() {
     var time = Date.now();
-    if (this.moduleType == "import" || this.moduleType == "unreferencedImport") {
+    if (this.moduleType == "import" || this.moduleType == "unreferencedImport" || this.moduleType == "moduleImport") {
       if (time - this.lastClickTime < 300)
         this.jumpToImport();
     } else {

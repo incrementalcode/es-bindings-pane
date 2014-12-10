@@ -33,29 +33,29 @@ function _parse(syntaxTree, callback) {
   _parseSyntaxTree(syntaxTree, result, imports, (function(error, _) {
     if (error)
       return callback(error);
-    var importModuleMap = new Map();
+    var moduleImportMap = new Map();
     for (var $__5 = imports[$traceurRuntime.toProperty(Symbol.iterator)](),
         $__6; !($__6 = $__5.next()).done; ) {
       var _import = $__6.value;
       {
         var source = _import.node.source.value;
         var sourceBaseName = path.basename(source);
-        if (!importModuleMap.has(source))
-          importModuleMap.set(source, {
+        if (!moduleImportMap.has(source))
+          moduleImportMap.set(source, {
             uriBase: sourceBaseName,
             moduleImports: []
           });
-        importModuleMap.get(source).moduleImports.push(_import);
+        moduleImportMap.get(source).moduleImports.push(_import);
       }
     }
-    var importModuleArray = [];
-    for (var $__7 = importModuleMap[$traceurRuntime.toProperty(Symbol.iterator)](),
+    var moduleImportArray = [];
+    for (var $__7 = moduleImportMap[$traceurRuntime.toProperty(Symbol.iterator)](),
         $__8; !($__8 = $__7.next()).done; ) {
       var obj = $__8.value;
-      importModuleArray.push(obj);
+      moduleImportArray.push(obj);
     }
     var editor = atom.workspace.getActiveTextEditor();
-    async.each(importModuleArray, (function(obj, callback) {
+    async.each(moduleImportArray, (function(obj, callback) {
       var $__11 = obj,
           source = $__11[0],
           $__12 = $__11[1],
@@ -86,9 +86,8 @@ function _parse(syntaxTree, callback) {
                 $__10; !($__10 = $__9.next()).done; ) {
               $__13();
             }
-            moduleModel.collapsed = true;
-            moduleModel.moduleType = 'import';
-            moduleModel.type = "ImportModule";
+            moduleModel.moduleType = 'moduleImport';
+            moduleModel.type = "moduleImport";
             moduleModel.location = null;
             moduleModel.imports = [];
             moduleModel.modulePath = modulePath;
