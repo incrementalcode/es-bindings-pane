@@ -97,8 +97,7 @@ var TreeModel = function TreeModel(name, location, type) {
   handleClick: function() {
     var time = Date.now();
     if (this.moduleType == "import" || this.moduleType == "unreferencedImport" || this.moduleType == "moduleImport") {
-      if (time - this.lastClickTime < 300)
-        this.jumpToImport();
+      this.jumpToImport();
     } else {
       this.highlightLocation();
     }
