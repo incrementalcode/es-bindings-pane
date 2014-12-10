@@ -92,6 +92,8 @@ var TreeModel = function TreeModel(name, location, type) {
   },
   getArrowClass: function() {
     if (this.children.length > 0) {
+      if (this.collapsed)
+        return "es-icon icon-chevron-right";
       return "es-icon icon-chevron-down";
     } else {
       return "";

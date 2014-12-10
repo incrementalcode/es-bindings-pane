@@ -16,6 +16,7 @@ var parseTreeModel = ($__parse_45_tree_45_model__ = require("./parse-tree-model"
 var treePanel,
     treeComponent = null;
 function activate(state) {
+  atom.workspaceView.command("es-bindings-pane:toggle", togglePanel);
   treePanel = document.createElement('div');
   treePanel.className = 'es-bindings-pane';
   createResizeHandle(treePanel);
@@ -47,4 +48,12 @@ function activate(state) {
       treePanel.style.setProperty('display', 'none');
     }
   }));
+}
+function togglePanel() {
+  if (treePanel) {
+    if (treePanel.style.getPropertyValue('display') == 'none')
+      treePanel.style.removeProperty('display');
+    else
+      treePanel.style.setProperty('display', 'none');
+  }
 }

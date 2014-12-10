@@ -1,0 +1,5 @@
+{
+  ".workspace": {
+    "ctrl-alt-\\": "es-bindings-pane:toggle"
+  }
+}

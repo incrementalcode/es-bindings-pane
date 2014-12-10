@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "async": "^0.9.0",
-    "es-parse-tools": "^0.2.0",
+    "es-parse-tools": "^0.2.3",
     "esprima-fb": "^8001.1001.0-dev-harmony-fb",
     "estraverse": "^1.8.0",
     "traceur": "0.0.78"
