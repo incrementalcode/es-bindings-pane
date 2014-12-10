@@ -19,33 +19,39 @@ function activate(state) {
   treePanel.className = 'es-bindings-pane';
   createResizeHandle(treePanel);
   atom.workspace.addRightPanel({item: treePanel});
-  var unmountTreePanel = (function() {
-    if (treeComponent) {
-      treePanel.removeChild(treeComponent);
-      treeComponent = null;
-    }
-  });
+  atom.workspace.observeTextEditors((function(editor) {
+    editor.onDidSave((function(event) {
+      displayPanel(editor);
+    }));
+  }));
   atom.workspace.observeActivePaneItem((function(item) {
     if (!item)
       return;
-    if (item.getPath && item.getGrammar && item.getGrammar().name == 'JavaScript') {
-      parseTreeModel(item.getPath(), (function(error, treeModel) {
-        if (error) {
-          console.warn("Warning during parseURI() from main.js: " + error.stack);
-          unmountTreePanel();
-          treePanel.style.setProperty('display', 'none');
-          return;
-        }
-        unmountTreePanel();
-        treePanel.style.removeProperty('display');
-        treeComponent = treeModel.render();
-        treePanel.appendChild(treeComponent);
-      }));
-    } else {
-      unmountTreePanel();
-      treePanel.style.setProperty('display', 'none');
-    }
+    displayPanel(item);
   }));
+}
+function displayPanel(item) {
+  if (item.getPath && item.getGrammar && item.getGrammar().name == 'JavaScript') {
+    parseTreeModel(item.getPath(), (function(error, treeModel) {
+      if (error) {
+        console.warn("Warning during parseURI() from main.js: " + error.stack);
+        return treePanel.style.setProperty('opacity', '0.5');
+      }
+      unmountTreePanel();
+      treePanel.style.removeProperty('display');
+      treePanel.style.removeProperty('opacity');
+      treeComponent = treeModel.render();
+      treePanel.appendChild(treeComponent);
+    }));
+  } else {
+    return treePanel.style.setProperty('display', 'none');
+  }
+}
+function unmountTreePanel() {
+  if (treeComponent) {
+    treePanel.removeChild(treeComponent);
+    treeComponent = null;
+  }
 }
 function togglePanel() {
   if (treePanel) {
