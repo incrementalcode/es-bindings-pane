@@ -69,15 +69,24 @@ function _parse(syntaxTree, callback) {
             moduleModel.children = moduleModel.children.filter((function(child) {
               return child.isExport;
             }));
-            for (var $__9 = moduleModel.children[$traceurRuntime.toProperty(Symbol.iterator)](),
-                $__10; !($__10 = $__9.next()).done; ) {
+            var $__13 = function() {
               var child = $__10.value;
               {
+                if (moduleImports.filter((function(_import) {
+                  return _import.name == child.name;
+                })).length > 0)
+                  child.isImport = true;
                 child.collapsed = true;
                 child.location = null;
+                child.isExport = false;
               }
+            };
+            for (var $__9 = moduleModel.children[$traceurRuntime.toProperty(Symbol.iterator)](),
+                $__10; !($__10 = $__9.next()).done; ) {
+              $__13();
             }
             moduleModel.collapsed = true;
+            moduleModel.isImport = true;
             moduleModel.type = "ImportModule";
             moduleModel.location = null;
             moduleModel.imports = [];
@@ -117,9 +126,9 @@ function _parseSyntaxTree(syntaxTree, result, imports, callback) {
         case "ImportDeclaration":
           for (var $__7 = node.specifiers[$traceurRuntime.toProperty(Symbol.iterator)](),
               $__8; !($__8 = $__7.next()).done; ) {
-            var specifier$__13 = $__8.value;
+            var specifier$__14 = $__8.value;
             imports.push({
-              specifier: specifier$__13,
+              name: specifier$__14.name ? specifier$__14.name.name : specifier$__14.id.name,
               node: node
             });
           }

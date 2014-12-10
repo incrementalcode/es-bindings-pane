@@ -12,6 +12,7 @@ var TreeModel = function TreeModel(name, location, type) {
   this.location = location;
   this.type = type;
   this.isExport = isExport;
+  this.isImport = false;
   this.meta = meta;
   this.children = [];
   this.imports = [];
@@ -84,7 +85,7 @@ var TreeModel = function TreeModel(name, location, type) {
     }
     if (this.isExport)
       result += " es-export-text";
-    else if (this.type == "ImportModule")
+    else if (this.isImport)
       result += " es-import-text";
     else
       result += " es-default-text";

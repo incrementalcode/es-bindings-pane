@@ -9,9 +9,7 @@ var $__resize_45_handle__,
     $__tree_45_model__,
     $__parse_45_tree_45_model__;
 var createResizeHandle = ($__resize_45_handle__ = require("./resize-handle"), $__resize_45_handle__ && $__resize_45_handle__.__esModule && $__resize_45_handle__ || {default: $__resize_45_handle__}).createResizeHandle;
-var $__1 = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}),
-    TreeModel = $__1.TreeModel,
-    syntaxTreeToModel = $__1.syntaxTreeToModel;
+var TreeModel = ($__tree_45_model__ = require("./tree-model"), $__tree_45_model__ && $__tree_45_model__.__esModule && $__tree_45_model__ || {default: $__tree_45_model__}).TreeModel;
 var parseTreeModel = ($__parse_45_tree_45_model__ = require("./parse-tree-model"), $__parse_45_tree_45_model__ && $__parse_45_tree_45_model__.__esModule && $__parse_45_tree_45_model__ || {default: $__parse_45_tree_45_model__}).parseTreeModel;
 var treePanel,
     treeComponent = null;
